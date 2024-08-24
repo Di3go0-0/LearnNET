@@ -1,7 +1,7 @@
 # .NET build artifacts
 bin/
 obj/
-
+.vscode/
 # Visual Studio files
 .vs/
 *.suo
