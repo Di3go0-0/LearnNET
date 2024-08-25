@@ -12,6 +12,6 @@ namespace api.DTOs.Stock
         public decimal Purchase { get; set; }
         public decimal LastDiv { get; set; }
         public string Industry { get; set; } = string.Empty;
-        public long MyProperty { get; set; }
+        public long MarketCap { get; set; }
     }
 }
