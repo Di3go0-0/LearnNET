@@ -11,8 +11,8 @@ using api.data;
 namespace api.Migrations
 {
     [DbContext(typeof(AplicationDBContext))]
-    [Migration("20240824011115_init")]
-    partial class init
+    [Migration("20240825022656_UpdateStock")]
+    partial class UpdateStock
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,7 +66,7 @@ namespace api.Migrations
                     b.Property<decimal>("LastDiv")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<long>("MyProperty")
+                    b.Property<long>("MarketCap")
                         .HasColumnType("bigint");
 
                     b.Property<decimal>("Purchase")
