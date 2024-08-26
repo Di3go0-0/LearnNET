@@ -33,7 +33,7 @@ namespace api.Repository
             return comment;
         }
 
-        public async Task<Comment?> UpdateCommentAsync(int id, UpdateCommentRequestDto comment)
+        public async Task<Comment?> UpdateCommentAsync(int id, Comment comment)
         {
             var commentModel = await _context.Comments.FindAsync(id);
             if (commentModel == null)

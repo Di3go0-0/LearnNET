@@ -29,7 +29,7 @@ namespace api.Controllers
             var commentDto = comments.Select(s => s.ToCommentDto());
             return Ok(commentDto);
         }
-        
+
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetCommentById([FromRoute] int id)
@@ -44,13 +44,13 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("{stockId}")]
-        public async Task<IActionResult> CreateComment([FromRoute] int stockId,[FromBody] CreateCommentRequestDto commentDto)
+        public async Task<IActionResult> CreateComment([FromRoute] int stockId, [FromBody] CreateCommentRequestDto commentDto)
         {
             if (!await _stockRepository.StockExist(stockId))
             {
                 return NotFound(new { message = "Stock not found" });
             }
-             var commentModel = commentDto.ToCommentFromCreateDTO(stockId);
+            var commentModel = commentDto.ToCommentFromCreateDTO(stockId);
             var comment = await _commentRepository.CreateCommentAsync(commentModel);
 
             return CreatedAtAction(nameof(GetCommentById), new { id = commentModel.Id }, commentModel.ToCommentDto());
@@ -59,7 +59,10 @@ namespace api.Controllers
         [Route("{id}")]
         public async Task<IActionResult> UpdateComment([FromRoute] int id, [FromBody] UpdateCommentRequestDto updateDto)
         {
-            var stockModel = await _commentRepository.UpdateCommentAsync(id, updateDto);
+            var commentModel = updateDto.ToUpdateCommentDTO();
+
+            var stockModel = await _commentRepository.UpdateCommentAsync(id, commentModel);
+
             if (stockModel == null)
             {
                 return NotFound(new { message = "Stock not found" });
