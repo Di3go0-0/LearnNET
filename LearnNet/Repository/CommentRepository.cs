@@ -26,12 +26,11 @@ namespace api.Repository
         {
             return _context.Comments.FirstOrDefaultAsync(c => c.Id == id);
         }
-        public async Task<Comment> CreateCommentAsync(CreateCommentRequestDto comment)
+        public async Task<Comment> CreateCommentAsync(Comment comment)
         {
-            var commentModel = comment.ToCommentFromCreateDTO();
-            await _context.Comments.AddAsync(commentModel);
+            await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
-            return commentModel;
+            return comment;
         }
 
         public async Task<Comment?> UpdateCommentAsync(int id, UpdateCommentRequestDto comment)
@@ -43,8 +42,6 @@ namespace api.Repository
             }
             commentModel.Title = comment.Title;
             commentModel.Content = comment.Content;
-            commentModel.CreatedOn = comment.CreatedOn;
-            commentModel.StockId = comment.StockId;
 
             await _context.SaveChangesAsync();
             return commentModel;
