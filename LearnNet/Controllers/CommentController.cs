@@ -25,6 +25,10 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCommetns()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var comments = await _commentRepository.GetCommentsAsync();
             var commentDto = comments.Select(s => s.ToCommentDto());
             return Ok(commentDto);
@@ -34,6 +38,10 @@ namespace api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetCommentById([FromRoute] int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var comment = await _commentRepository.GetCommentByIdAsync(id);
             if (comment == null)
             {
@@ -46,6 +54,10 @@ namespace api.Controllers
         [Route("{stockId:int}")]
         public async Task<IActionResult> CreateComment([FromRoute] int stockId, [FromBody] CreateCommentRequestDto commentDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             if (!await _stockRepository.StockExist(stockId))
             {
                 return NotFound(new { message = "Stock not found" });
@@ -59,6 +71,10 @@ namespace api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> UpdateComment([FromRoute] int id, [FromBody] UpdateCommentRequestDto updateDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var commentModel = updateDto.ToUpdateCommentDTO();
 
             var stockModel = await _commentRepository.UpdateCommentAsync(id, commentModel);
