@@ -9,6 +9,7 @@ using api.data;
 using api.Mappers;
 using api.DTOs.Stock;
 using api.Interfaces;
+using api.Helpers;
 
 namespace api.controllers
 {
@@ -23,13 +24,13 @@ namespace api.controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var stocks = await _stockRepository.GetAllStocksAsync();
+            var stocks = await _stockRepository.GetAllStocksAsync(query);
             var stockDto = stocks.Select(s => s.ToStockDto());
             return Ok(new { message = "Stocks Found", data = stockDto });
         }
