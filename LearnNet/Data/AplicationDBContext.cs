@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using api.models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using api.Models;
 
 namespace api.data
 {
-    public class AplicationDBContext : DbContext
+    public class AplicationDBContext : IdentityDbContext<UserModel>
     {
         public AplicationDBContext(DbContextOptions<AplicationDBContext> options) : base(options)
         {
