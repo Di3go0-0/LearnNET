@@ -36,7 +36,9 @@ builder.Services.AddIdentity<UserModel, IdentityRole>(options =>{
 .AddEntityFrameworkStores<AplicationDBContext>();
 
 var jwtSettings = builder.Configuration.GetSection("JWT");
-var key = Encoding.UTF8.GetBytes(jwtSettings["SigningKey"]);
+
+var signingKey = jwtSettings["SigningKey"] ?? throw new ArgumentNullException("SigningKey", "SigningKey cannot be null");
+var key = Encoding.UTF8.GetBytes(signingKey);
 
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

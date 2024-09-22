@@ -25,8 +25,15 @@ namespace api.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid data");
-
-                var existingEmail = await _userManager.FindByEmailAsync(registerDto.Email);
+                    
+                
+                if (string.IsNullOrEmpty(registerDto.Email))
+                {
+                    return BadRequest("Email is required");
+                }
+                
+                var existingEmail = await _userManager.FindByEmailAsync(registerDto.Email);   
+                            
                 if (existingEmail != null)
                     return BadRequest("User already exists");
 
@@ -35,6 +42,11 @@ namespace api.Controllers
                     UserName = registerDto.Username,
                     Email = registerDto.Email
                 };
+
+                if (string.IsNullOrEmpty(registerDto.Password))
+                {
+                    return BadRequest("Password is required");
+                }
 
                 var createdUser = await _userManager.CreateAsync(user, registerDto.Password);
 
