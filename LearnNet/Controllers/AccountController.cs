@@ -6,6 +6,7 @@ using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using api.DTOs.Account;
+using api.Interfaces;
 namespace api.Controllers
 {
     [Route("api/account")]
@@ -13,9 +14,11 @@ namespace api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<UserModel> _userManager;
-        public AccountController(UserManager<UserModel> userManager)
+        private readonly ITokenService _tokenService;
+        public AccountController(UserManager<UserModel> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -54,18 +57,21 @@ namespace api.Controllers
                 {
                     var roleResult = await _userManager.AddToRoleAsync(user, "User"); // Add user to role
                     if (roleResult.Succeeded)
-                    {
-                        return StatusCode(201, new { Message = "User created successfully" });
-                    }
-                    else
-                        return StatusCode(500, new{Error = "User created but role not assigned"});
+                        return StatusCode(201, new { 
+                                                        Message = "User created successfully",
+                                                        User = new NewUserDto
+                                                        {
+                                                            UserName = user.UserName ?? string.Empty,
+                                                            Email = user.Email,
+                                                            Token = _tokenService.CreateToken(user)
+                                                        }
+                                                    }
+                                                    );
+                    
+                    return StatusCode(500, new{Error = "User created but role not assigned"});
                 }
-                else
-                {
-                    return StatusCode(500, new { Error = createdUser.Errors });
-                    // return BadRequest(createdUser.Errors);
-
-                }
+                
+                return StatusCode(500, new { Error = createdUser.Errors });
 
             }
             catch (Exception e)
