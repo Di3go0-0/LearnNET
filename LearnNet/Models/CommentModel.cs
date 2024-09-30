@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using api.models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.models
 {
+    [Table("Comments")]
     public class Comment
     {
         public int Id {get; set;}
